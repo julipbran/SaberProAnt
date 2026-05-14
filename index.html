@@ -3,420 +3,1038 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Análisis Electoral Antioquia 2010–2022</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<title>Saber Pro Antioquia 2012–2024 · Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Arial, Helvetica, sans-serif; background: #f4f5f7; color: #1a1a1a; padding: 24px; }
-  h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
-  .subtitle { font-size: 14px; color: #555; margin-bottom: 28px; }
-  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
-  .tab { padding: 7px 16px; border-radius: 8px; border: 1px solid #ccc; font-size: 13px; cursor: pointer; background: #fff; color: #444; }
-  .tab.active { background: #1a56db; color: #fff; border-color: #1a56db; }
-  .section { display: none; }
-  .section.active { display: block; }
-  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .metric { background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid #e0e0e0; }
-  .metric-label { font-size: 12px; color: #666; margin-bottom: 4px; }
-  .metric-value { font-size: 24px; font-weight: 600; color: #111; }
-  .metric-sub { font-size: 11px; color: #999; margin-top: 2px; }
-  .chart-card { background: #fff; border-radius: 12px; border: 1px solid #e0e0e0; padding: 20px 20px 12px; margin-bottom: 24px; }
-  .chart-title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 14px; }
-  .chart-wrap { position: relative; width: 100%; }
-  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; font-size: 12px; color: #555; }
-  .legend span { display: flex; align-items: center; gap: 5px; }
-  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
-  .insight { background: #f0f4ff; border-left: 4px solid #1a56db; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #333; line-height: 1.7; }
-  .insight strong { color: #111; }
-  .export-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; padding: 14px 16px; background: #fff; border-radius: 10px; border: 1px solid #e0e0e0; align-items: center; }
-  .export-bar span { font-size: 13px; color: #555; margin-right: 4px; }
-  .btn { padding: 7px 16px; border-radius: 7px; border: 1px solid #bbb; background: #fff; font-size: 13px; cursor: pointer; color: #333; }
-  .btn:hover { background: #f0f0f0; }
-  .btn-primary { background: #1a56db; color: #fff; border-color: #1a56db; }
-  .btn-primary:hover { background: #1447b5; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; font-size: 12px; color: #666; font-weight: 600; padding: 8px 10px; border-bottom: 1px solid #e0e0e0; background: #fafafa; }
-  td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; color: #222; }
-  tr:last-child td { border-bottom: none; }
-  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 6px; }
-  .badge-up { background: #e6f4ea; color: #1e6e36; }
-  .badge-warn { background: #fff3cd; color: #856404; }
-  .badge-down { background: #fdecea; color: #c62828; }
-  .bar-cell { display: flex; align-items: center; gap: 8px; }
-  .bar-bg { flex: 1; background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden; min-width: 60px; }
-  .bar-fill { height: 100%; border-radius: 4px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-  .insight-card { background: #fff; border-radius: 10px; padding: 14px 16px; border: 1px solid #e0e0e0; }
-  .insight-card .ic-label { font-size: 11px; color: #888; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
-  .insight-card p { font-size: 13px; color: #333; line-height: 1.6; }
-  @media print { .export-bar { display: none; } .tabs { display: none; } .section { display: block !important; } body { background: #fff; } }
-  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+:root {
+  --bg: #0d0f14;
+  --surface: #13161e;
+  --surface2: #1a1e2a;
+  --border: #252a38;
+  --text: #e8eaf0;
+  --muted: #6b7280;
+  --accent: #f4a535;
+  --accent2: #5b8cf7;
+  --accent3: #e05c7b;
+  --accent4: #3ecfa0;
+  --accent5: #b06bff;
+  --blq-a: #e05c7b;
+  --blq-b: #f4a535;
+  --blq-c: #3ecfa0;
+  --blq-d: #5b8cf7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 3.5rem 2rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #0a0c10 0%, var(--bg) 100%);
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(244,165,53,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+header h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #fff;
+}
+header h1 span { color: var(--accent); }
+header .subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 0.75rem;
+}
+header .nota-metodologica {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(244,165,53,0.08);
+  border: 1px solid rgba(244,165,53,0.25);
+  border-radius: 8px;
+  padding: 0.85rem 1.25rem;
+  margin-top: 1.5rem;
+  font-size: 0.82rem;
+  color: #c8a96a;
+  max-width: 700px;
+  text-align: left;
+}
+.bloques-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+.bloque-pill {
+  display: flex; align-items: center; gap: 0.4rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.3rem 0.85rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-a { background: var(--blq-a); }
+.dot-b { background: var(--blq-b); }
+.dot-c { background: var(--blq-c); }
+.dot-d { background: var(--blq-d); }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(13,15,20,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav::-webkit-scrollbar { display: none; }
+nav ul {
+  display: flex;
+  list-style: none;
+  white-space: nowrap;
+  padding: 0 1rem;
+}
+nav ul li a {
+  display: block;
+  padding: 0.85rem 1rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+nav ul li a:hover, nav ul li a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ── MAIN LAYOUT ── */
+main { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+section { padding: 3rem 0 1.5rem; border-bottom: 1px solid var(--border); }
+section:last-child { border-bottom: none; }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+.section-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+  max-width: 680px;
+}
+.section-desc strong { color: var(--accent); }
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.1rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.kpi-card:hover { border-color: var(--accent); }
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--kpi-color, var(--accent));
+  border-radius: 10px 10px 0 0;
+}
+.kpi-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: var(--kpi-color, var(--accent));
+  line-height: 1;
+}
+.kpi-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.4rem;
+}
+
+/* ── CHART CARDS ── */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
+.chart-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 1.5rem; }
+.chart-full { margin-top: 1.5rem; }
+@media (max-width: 750px) {
+  .chart-grid, .chart-grid-3 { grid-template-columns: 1fr; }
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem 1.1rem;
+}
+.card-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.card-title strong { color: var(--text); }
+.chart-wrap { position: relative; width: 100%; }
+.chart-wrap canvas { width: 100% !important; }
+
+/* ── BLOQUE SELECTOR ── */
+.bloque-tabs {
+  display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.25rem;
+}
+.btab {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btab.active, .btab:hover { color: #fff; }
+.btab[data-b="all"].active { background: var(--surface2); border-color: #fff3; color: #fff; }
+.btab[data-b="A"].active { background: rgba(224,92,123,0.15); border-color: var(--blq-a); color: var(--blq-a); }
+.btab[data-b="B"].active { background: rgba(244,165,53,0.15); border-color: var(--blq-b); color: var(--blq-b); }
+.btab[data-b="C"].active { background: rgba(62,207,160,0.15); border-color: var(--blq-c); color: var(--blq-c); }
+.btab[data-b="D"].active { background: rgba(91,140,247,0.15); border-color: var(--blq-d); color: var(--blq-d); }
+
+/* ── TABLE ── */
+.tabla-wrap { overflow-x: auto; margin-top: 1rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+th {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.67rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+td { padding: 0.55rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+tr:hover td { background: rgba(255,255,255,0.02); }
+.bar-cell { display: flex; align-items: center; gap: 0.5rem; }
+.bar-inline { height: 6px; border-radius: 3px; background: var(--accent); min-width: 2px; }
+.badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* ── INSIGHT BOXES ── */
+.insights { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
+.insight {
+  flex: 1; min-width: 230px;
+  background: var(--surface2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.1rem;
+  font-size: 0.84rem;
+}
+.insight.b2 { border-left-color: var(--accent2); }
+.insight.b3 { border-left-color: var(--accent3); }
+.insight.b4 { border-left-color: var(--accent4); }
+.insight strong { font-weight: 600; }
+
+/* ── MOVILIDAD VISUAL ── */
+.movil-vis {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  align-items: start; margin-top: 1.5rem;
+}
+.movil-stat {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+.movil-big {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--accent4);
+  line-height: 1;
+}
+.movil-desc {
+  font-size: 0.84rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) { .movil-vis { grid-template-columns: 1fr; } }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
 </style>
 </head>
 <body>
 
-<h1>Análisis Electoral — Antioquia 2010–2022</h1>
-<p class="subtitle">Segunda vuelta presidencial · 9 subregiones · 125 municipios</p>
+<header>
+  <h1>Lo que <span>heredamos</span><br>en Antioquia</h1>
+  <div class="subtitle">Resultados Saber Pro · Antioquia · 2012 – 2024 · 354.610 estudiantes</div>
 
-<div class="export-bar">
-  <span>Exportar:</span>
-  <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar PDF</button>
-  <button class="btn" onclick="exportChart('chartVotos','votos_subregion')">Votos PNG</button>
-  <button class="btn" onclick="exportChart('chartLineas','series_tiempo')">Serie tiempo PNG</button>
-  <button class="btn" onclick="exportChart('chartAbstencion','abstencion')">Abstención PNG</button>
-  <button class="btn" onclick="exportChart('chartPartic','participacion')">Participación PNG</button>
-  <button class="btn" onclick="exportChart('chartEspeciales','votos_especiales')">Especiales PNG</button>
-  <button class="btn" onclick="exportChart('chartResumen','resumen')">Resumen PNG</button>
-  <button class="btn" onclick="exportAllCharts()">Todos los PNG</button>
-</div>
-
-<div class="tabs">
-  <button class="tab active" onclick="showTab('votos',this)">Votos por subregión</button>
-  <button class="tab" onclick="showTab('abstencion',this)">Abstención</button>
-  <button class="tab" onclick="showTab('participacion',this)">Participación</button>
-  <button class="tab" onclick="showTab('especiales',this)">Votos especiales</button>
-  <button class="tab" onclick="showTab('resumen',this)">Resumen ejecutivo</button>
-</div>
-
-<!-- TAB VOTOS -->
-<div id="tab-votos" class="section active">
-  <div class="metric-grid">
-    <div class="metric"><div class="metric-label">Total votos 2010</div><div class="metric-value">1.76M</div><div class="metric-sub">base de referencia</div></div>
-    <div class="metric"><div class="metric-label">Total votos 2022</div><div class="metric-value">2.90M</div><div class="metric-sub">+65% en 12 años</div></div>
-    <div class="metric"><div class="metric-label">Mayor crecimiento</div><div class="metric-value">+73%</div><div class="metric-sub">Nordeste</div></div>
-    <div class="metric"><div class="metric-label">Menor crecimiento</div><div class="metric-value">+35%</div><div class="metric-sub">Suroeste</div></div>
+  <div class="nota-metodologica">
+    ⚠️ <div><strong>Nota metodológica:</strong> El ICFES modificó la escala de calificación en diferentes períodos. Los datos se agrupan en 4 bloques comparables: <strong>A</strong> (2012–2013, escala aprox. 0–100), <strong>B</strong> (2014–2015, escala transición), <strong>C</strong> (2017–2022, escala 0–300 plena) y <strong>D</strong> (2023–2024, nuevo formato). Las comparaciones entre bloques deben hacerse con precaución; las comparaciones dentro de cada bloque son sólidas.</div>
   </div>
-  <div class="insight"><strong>Efecto posacuerdo de paz (post-2016):</strong> el salto más visible en participación se dio entre 2014 y 2018. Subregiones históricamente afectadas por conflicto como Nordeste (+73%), Bajo Cauca (+56.7%) y Urabá (+68.5%) muestran crecimientos superiores al promedio, consistentes con la reducción de violencia electoral tras la desmovilización de las FARC-EP. Sin embargo, la persistencia del ELN y grupos disidentes hace que el Bajo Cauca muestre caída en 2018 (30.8%), sugiriendo posible coerción residual.</div>
 
-  <div class="chart-card">
-    <div class="chart-title">Votos totales por subregión (2010–2022)</div>
-    <div class="legend">
-      <span><span class="legend-dot" style="background:#3266ad"></span>2010</span>
-      <span><span class="legend-dot" style="background:#5c9dd6"></span>2014</span>
-      <span><span class="legend-dot" style="background:#f0a500"></span>2018</span>
-      <span><span class="legend-dot" style="background:#d85a30"></span>2022</span>
+  <div class="bloques-legend">
+    <div class="bloque-pill"><div class="dot dot-a"></div> <span>Bloque A · 2012–2013</span></div>
+    <div class="bloque-pill"><div class="dot dot-b"></div> <span>Bloque B · 2014–2015</span></div>
+    <div class="bloque-pill"><div class="dot dot-c"></div> <span>Bloque C · 2017–2022</span></div>
+    <div class="bloque-pill"><div class="dot dot-d"></div> <span>Bloque D · 2023–2024</span></div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#panorama">Panorama</a></li>
+    <li><a href="#evolucion">Evolución</a></li>
+    <li><a href="#genero">Género</a></li>
+    <li><a href="#estrato">Estrato</a></li>
+    <li><a href="#ingreso">Ingreso</a></li>
+    <li><a href="#padres">Educación padres</a></li>
+    <li><a href="#trabajo">Trabajo</a></li>
+    <li><a href="#modalidad">Modalidad</a></li>
+    <li><a href="#becas">Becas</a></li>
+    <li><a href="#tecnologia">Tecnología</a></li>
+    <li><a href="#ingles">Inglés</a></li>
+    <li><a href="#carreras">Carreras</a></li>
+    <li><a href="#movilidad">Movilidad</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ══════════ PANORAMA ══════════ -->
+<section id="panorama">
+  <div class="section-title">Panorama general</div>
+  <div class="section-desc">354.610 estudiantes antioqueños presentaron el Saber Pro entre 2012 y 2024. <strong>58% son mujeres.</strong> El 42% vive en estrato 1 o 2. El 32% trabaja para pagar sus estudios o sostener el hogar.</div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--kpi-color:#f4a535">
+      <div class="kpi-num">354.610</div>
+      <div class="kpi-label">Estudiantes analizados</div>
     </div>
-    <div class="chart-wrap" style="height:360px"><canvas id="chartVotos"></canvas></div>
-  </div>
-
-  <div class="chart-card">
-    <div class="chart-title">Serie de tiempo: evolución de votos por subregión (excl. Valle de Aburrá)</div>
-    <div class="chart-wrap" style="height:300px"><canvas id="chartLineas"></canvas></div>
-  </div>
-
-  <div class="chart-card">
-    <div class="chart-title">Crecimiento de votos 2010–2022 por subregión</div>
-    <table>
-      <tr><th>Subregión</th><th>2010</th><th>2022</th><th>Crecimiento</th><th>Contexto conflicto</th></tr>
-      <tr><td>Nordeste</td><td>36,070</td><td>62,403</td><td><span class="badge badge-up">+73.0%</span></td><td><span class="badge badge-warn">ELN activo</span></td></tr>
-      <tr><td>Oriente</td><td>205,086</td><td>352,892</td><td><span class="badge badge-up">+72.1%</span></td><td><span class="badge badge-up">Bajo conflicto</span></td></tr>
-      <tr><td>Magdalena Medio</td><td>26,846</td><td>45,630</td><td><span class="badge badge-up">+70.0%</span></td><td><span class="badge badge-warn">Paramilitarismo</span></td></tr>
-      <tr><td>Valle de Aburrá</td><td>1,096,137</td><td>1,835,672</td><td><span class="badge badge-up">+67.5%</span></td><td><span class="badge badge-up">Urbano</span></td></tr>
-      <tr><td>Urabá</td><td>117,753</td><td>198,378</td><td><span class="badge badge-up">+68.5%</span></td><td><span class="badge badge-warn">Grupos armados</span></td></tr>
-      <tr><td>Norte</td><td>60,085</td><td>93,395</td><td><span class="badge badge-up">+55.4%</span></td><td><span class="badge badge-warn">ELN/disidencias</span></td></tr>
-      <tr><td>Bajo Cauca</td><td>48,072</td><td>75,308</td><td><span class="badge badge-up">+56.7%</span></td><td><span class="badge badge-down">Alto conflicto</span></td></tr>
-      <tr><td>Occidente</td><td>56,379</td><td>86,183</td><td><span class="badge badge-up">+52.9%</span></td><td><span class="badge badge-up">Bajo conflicto</span></td></tr>
-      <tr><td>Suroeste</td><td>112,279</td><td>151,155</td><td><span class="badge badge-up">+34.6%</span></td><td><span class="badge badge-up">Bajo conflicto</span></td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- TAB ABSTENCIÓN -->
-<div id="tab-abstencion" class="section">
-  <div class="metric-grid">
-    <div class="metric"><div class="metric-label">Mayor abstención 2022</div><div class="metric-value">71.9%</div><div class="metric-sub">Retiro (Oriente)</div></div>
-    <div class="metric"><div class="metric-label">Menor abstención 2022</div><div class="metric-value">28.1%</div><div class="metric-sub">Tarazá (Bajo Cauca)</div></div>
-    <div class="metric"><div class="metric-label">Promedio Antioquia 2022</div><div class="metric-value">47.5%</div><div class="metric-sub">abstención municipal</div></div>
-    <div class="metric"><div class="metric-label">Mayor caída abstención</div><div class="metric-value">−24.5pp</div><div class="metric-sub">Briceño 2010→2022</div></div>
-  </div>
-  <div class="insight"><strong>Paradoja del conflicto:</strong> los municipios del Bajo Cauca (Tarazá, Zaragoza, Nechí, Cáceres) presentan las menores tasas de abstención del departamento. Esto puede reflejar mecanismos de coerción electoral — presencia de grupos armados que presionan la participación. En contraste, municipios del Oriente con alta abstención (Retiro, La Ceja, Rionegro) son económicamente prósperos, indicando apatía política voluntaria.</div>
-
-  <div class="chart-card">
-    <div class="chart-title">Abstención promedio por subregión (2010–2022)</div>
-    <div class="legend">
-      <span><span class="legend-dot" style="background:#3266ad"></span>2010</span>
-      <span><span class="legend-dot" style="background:#5c9dd6"></span>2014</span>
-      <span><span class="legend-dot" style="background:#f0a500"></span>2018</span>
-      <span><span class="legend-dot" style="background:#d85a30"></span>2022</span>
+    <div class="kpi-card" style="--kpi-color:#5b8cf7">
+      <div class="kpi-num">12</div>
+      <div class="kpi-label">Años cubiertos (sin 2016)</div>
     </div>
-    <div class="chart-wrap" style="height:340px"><canvas id="chartAbstencion"></canvas></div>
-  </div>
-
-  <div class="chart-card">
-    <div class="chart-title">Top 8 municipios con mayor abstención 2022</div>
-    <table>
-      <tr><th>Municipio</th><th>Subregión</th><th>Abstención 2022</th><th>Tendencia</th></tr>
-      <tr><td>Retiro</td><td>Oriente</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:72%;background:#d85a30"></div></div>72.1%</div></td><td><span class="badge badge-up">↑ creciendo</span></td></tr>
-      <tr><td>La Ceja</td><td>Oriente</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:71%;background:#d85a30"></div></div>71.3%</div></td><td><span class="badge badge-up">↑ creciendo</span></td></tr>
-      <tr><td>Rionegro</td><td>Oriente</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:70%;background:#d85a30"></div></div>70.4%</div></td><td><span class="badge badge-up">↑ creciendo</span></td></tr>
-      <tr><td>El Carmen de Viboral</td><td>Oriente</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:70%;background:#d85a30"></div></div>69.8%</div></td><td><span class="badge badge-up">↑ creciendo</span></td></tr>
-      <tr><td>La Unión</td><td>Oriente</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:69%;background:#d85a30"></div></div>68.9%</div></td><td><span class="badge badge-up">↑ creciendo</span></td></tr>
-      <tr><td>Sabaneta</td><td>Valle de Aburrá</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:68%;background:#ea6350"></div></div>67.7%</div></td><td><span class="badge badge-up">↑ creciendo</span></td></tr>
-      <tr><td>Guarne</td><td>Oriente</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:68%;background:#d85a30"></div></div>68.2%</div></td><td><span class="badge badge-up">↑ creciendo</span></td></tr>
-      <tr><td>Guatapé</td><td>Oriente</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:68%;background:#d85a30"></div></div>68.1%</div></td><td><span class="badge badge-up">↑ creciendo</span></td></tr>
-    </table>
-  </div>
-
-  <div class="chart-card">
-    <div class="chart-title">Top 8 municipios con menor abstención 2022 (posible anomalía)</div>
-    <table>
-      <tr><th>Municipio</th><th>Subregión</th><th>Abstención 2022</th><th>Alerta</th></tr>
-      <tr><td>Tarazá</td><td>Bajo Cauca</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:28%;background:#3266ad"></div></div>28.1%</div></td><td><span class="badge badge-warn">Presencia armada</span></td></tr>
-      <tr><td>Ituango</td><td>Norte</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:28%;background:#3266ad"></div></div>28.2%</div></td><td><span class="badge badge-warn">ELN / disidencias</span></td></tr>
-      <tr><td>Anorí</td><td>Nordeste</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:32%;background:#5c9dd6"></div></div>31.8%</div></td><td><span class="badge badge-warn">ELN activo</span></td></tr>
-      <tr><td>Zaragoza</td><td>Bajo Cauca</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:32%;background:#3266ad"></div></div>31.9%</div></td><td><span class="badge badge-warn">Presencia armada</span></td></tr>
-      <tr><td>Valdivia</td><td>Norte</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:33%;background:#5c9dd6"></div></div>33.4%</div></td><td><span class="badge badge-warn">Corredor ELN</span></td></tr>
-      <tr><td>Nechí</td><td>Bajo Cauca</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:35%;background:#5c9dd6"></div></div>34.6%</div></td><td><span class="badge badge-warn">Presencia armada</span></td></tr>
-      <tr><td>Cáceres</td><td>Bajo Cauca</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:35%;background:#5c9dd6"></div></div>35.0%</div></td><td><span class="badge badge-warn">Presencia armada</span></td></tr>
-      <tr><td>El Bagre</td><td>Bajo Cauca</td><td><div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:35%;background:#5c9dd6"></div></div>35.3%</div></td><td><span class="badge badge-warn">Presencia armada</span></td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- TAB PARTICIPACIÓN -->
-<div id="tab-participacion" class="section">
-  <div class="metric-grid">
-    <div class="metric"><div class="metric-label">Promedio Antioquia 2010</div><div class="metric-value">38.2%</div><div class="metric-sub">participación</div></div>
-    <div class="metric"><div class="metric-label">Promedio Antioquia 2022</div><div class="metric-value">52.5%</div><div class="metric-sub">participación</div></div>
-    <div class="metric"><div class="metric-label">Mayor salto 2010→2022</div><div class="metric-value">+24.5pp</div><div class="metric-sub">Briceño (Norte)</div></div>
-    <div class="metric"><div class="metric-label">Subregión más dinámica</div><div class="metric-value">Norte</div><div class="metric-sub">mayor alza post-paz</div></div>
-  </div>
-  <div class="insight"><strong>Efecto territorial del Acuerdo de Paz:</strong> Briceño pasó de 16.7% de participación en 2010 a 41.2% en 2022 (+24.5pp), el mayor incremento del departamento. Esta zona fue uno de los epicentros del proceso de dejación de armas de las FARC-EP. La reducción de amenazas directas contra votantes explica gran parte del aumento observado en el Norte antioqueño.</div>
-
-  <div class="chart-card">
-    <div class="chart-title">Tasa de participación promedio por subregión (2010–2022)</div>
-    <div class="legend">
-      <span><span class="legend-dot" style="background:#3266ad"></span>2010</span>
-      <span><span class="legend-dot" style="background:#5c9dd6"></span>2014</span>
-      <span><span class="legend-dot" style="background:#f0a500"></span>2018</span>
-      <span><span class="legend-dot" style="background:#639922"></span>2022</span>
+    <div class="kpi-card" style="--kpi-color:#e05c7b">
+      <div class="kpi-num">58%</div>
+      <div class="kpi-label">Son mujeres</div>
     </div>
-    <div class="chart-wrap" style="height:340px"><canvas id="chartPartic"></canvas></div>
-  </div>
-
-  <div class="chart-card">
-    <div class="chart-title">Municipios con mayor salto en participación (2010→2022)</div>
-    <table>
-      <tr><th>Municipio</th><th>Subregión</th><th>2010</th><th>2022</th><th>Δ pp</th><th>Contexto</th></tr>
-      <tr><td>Briceño</td><td>Norte</td><td>16.7%</td><td>41.2%</td><td><span class="badge badge-up">+24.5pp</span></td><td>Epicentro desmovilización FARC</td></tr>
-      <tr><td>Guadalupe</td><td>Norte</td><td>20.6%</td><td>44.5%</td><td><span class="badge badge-up">+23.9pp</span></td><td>Zona liberada de conflicto</td></tr>
-      <tr><td>Murindó</td><td>Urabá</td><td>22.7%</td><td>46.6%</td><td><span class="badge badge-up">+23.9pp</span></td><td>Zona histórica guerrilla</td></tr>
-      <tr><td>Toledo</td><td>Norte</td><td>20.3%</td><td>40.5%</td><td><span class="badge badge-up">+20.2pp</span></td><td>Reducción violencia ELN</td></tr>
-      <tr><td>Yondó</td><td>Magdalena Medio</td><td>40.1%</td><td>61.2%</td><td><span class="badge badge-up">+21.1pp</span></td><td>Corredor estratégico</td></tr>
-      <tr><td>Puerto Nare</td><td>Magdalena Medio</td><td>33.0%</td><td>52.9%</td><td><span class="badge badge-up">+19.9pp</span></td><td>Mejora en seguridad</td></tr>
-      <tr><td>Anorí</td><td>Nordeste</td><td>13.6%</td><td>31.8%</td><td><span class="badge badge-up">+18.1pp</span></td><td>ELN aún activo — crecimiento parcial</td></tr>
-      <tr><td>Dabeiba</td><td>Occidente</td><td>24.3%</td><td>42.2%</td><td><span class="badge badge-up">+17.9pp</span></td><td>Proceso de paz</td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- TAB ESPECIALES -->
-<div id="tab-especiales" class="section">
-  <div class="metric-grid">
-    <div class="metric"><div class="metric-label">Votos en blanco 2014</div><div class="metric-value">124,919</div><div class="metric-sub">pico histórico</div></div>
-    <div class="metric"><div class="metric-label">Votos nulos 2014</div><div class="metric-value">71,596</div><div class="metric-sub">pico histórico</div></div>
-    <div class="metric"><div class="metric-label">Tarjetas no marcadas 2022</div><div class="metric-value">3,646</div><div class="metric-sub">mínimo histórico</div></div>
-    <div class="metric"><div class="metric-label">Voto en blanco / total 2018</div><div class="metric-value">5.4%</div><div class="metric-sub">del total de votos</div></div>
-  </div>
-  <div class="insight"><strong>2014: el año del voto protesta.</strong> El pico de votos nulos y en blanco coincide con el proceso de paz en curso y la polarización Santos–Zuluaga. En 2022, con la candidatura histórica de Gustavo Petro, los votos en blanco bajan significativamente — muchos electores de voto-protesta se volcaron a candidatos definidos. Las tarjetas no marcadas muestran tendencia decreciente sistemática, señal de mejora logística.</div>
-
-  <div class="chart-card">
-    <div class="chart-title">Evolución de votos especiales en Antioquia (2010–2022)</div>
-    <div class="legend">
-      <span><span class="legend-dot" style="background:#3266ad"></span>Votos en blanco</span>
-      <span><span class="legend-dot" style="background:#d85a30"></span>Votos nulos</span>
-      <span><span class="legend-dot" style="background:#888780"></span>Tarjetas no marcadas</span>
+    <div class="kpi-card" style="--kpi-color:#b06bff">
+      <div class="kpi-num">42%</div>
+      <div class="kpi-label">Estrato 1 o 2</div>
     </div>
-    <div class="chart-wrap" style="height:280px"><canvas id="chartEspeciales"></canvas></div>
-  </div>
-
-  <div class="chart-card">
-    <div class="chart-title">Votos en blanco por subregión: 2010 vs 2022</div>
-    <div class="legend">
-      <span><span class="legend-dot" style="background:#3266ad"></span>2010</span>
-      <span><span class="legend-dot" style="background:#639922"></span>2022</span>
+    <div class="kpi-card" style="--kpi-color:#3ecfa0">
+      <div class="kpi-num">32.1%</div>
+      <div class="kpi-label">Trabaja por necesidad</div>
     </div>
-    <div class="chart-wrap" style="height:300px"><canvas id="chartBlancoSub"></canvas></div>
-  </div>
-</div>
-
-<!-- TAB RESUMEN -->
-<div id="tab-resumen" class="section">
-  <div class="chart-card">
-    <div class="chart-title">Tendencia general: participación vs abstención promedio (Antioquia)</div>
-    <div class="chart-wrap" style="height:280px"><canvas id="chartResumen"></canvas></div>
-  </div>
-
-  <div class="grid2">
-    <div class="insight-card" style="border-left:4px solid #639922">
-      <div class="ic-label">Hallazgo 1 — Acuerdo de paz y participación</div>
-      <p>Briceño (+24.5pp), Guadalupe (+23.9pp) y Dabeiba (+17.9pp) muestran crecimiento consistente con el impacto territorial del Acuerdo de 2016. El período 2014–2018 concentra el mayor salto departamental.</p>
+    <div class="kpi-card" style="--kpi-color:#f4a535">
+      <div class="kpi-num">15.2 pts</div>
+      <div class="kpi-label">Brecha E1 vs E6</div>
     </div>
-    <div class="insight-card" style="border-left:4px solid #d85a30">
-      <div class="ic-label">Hallazgo 2 — Anomalía en Bajo Cauca</div>
-      <p>Tarazá, Zaragoza, Nechí y Cáceres combinan alta presencia armada con abstención inusualmente baja. Patrón consistente con coerción electoral o movilización clientelar bajo presión.</p>
+    <div class="kpi-card" style="--kpi-color:#e05c7b">
+      <div class="kpi-num">30.1 pts</div>
+      <div class="kpi-label">Brecha beca vs sin beca</div>
     </div>
-    <div class="insight-card" style="border-left:4px solid #f0a500">
-      <div class="ic-label">Hallazgo 3 — Pico de voto protesta 2014</div>
-      <p>2014 fue el año de mayor descontento: 124,919 votos en blanco y 71,596 nulos. La polarización Santos–Zuluaga alrededor del proceso de paz canalizó el rechazo en urnas.</p>
-    </div>
-    <div class="insight-card" style="border-left:4px solid #5c9dd6">
-      <div class="ic-label">Hallazgo 4 — Paradoja del Oriente</div>
-      <p>Retiro, La Ceja y Rionegro — municipios prósperos — tienen la mayor abstención del departamento (+70%). Apunta a apatía política de clases medias-altas, no a obstáculos de acceso.</p>
-    </div>
-    <div class="insight-card" style="border-left:4px solid #7F77DD">
-      <div class="ic-label">Hallazgo 5 — Crecimiento sostenido</div>
-      <p>Los votos en Antioquia crecieron +65% entre 2010 y 2022. El Nordeste (+73%) y Oriente (+72%) lideran, superando el ritmo del crecimiento del censo electoral.</p>
-    </div>
-    <div class="insight-card" style="border-left:4px solid #888780">
-      <div class="ic-label">Hallazgo 6 — Calidad de datos</div>
-      <p>Datos con buena calidad estructural. Columnas Unnamed: 24–27 son 100% nulas y deben eliminarse. La variable "Abstención" en la hoja de tasas contiene participación — requiere renombrar.</p>
+    <div class="kpi-card" style="--kpi-color:#3ecfa0">
+      <div class="kpi-num">18.710</div>
+      <div class="kpi-label">Logran movilidad educativa</div>
     </div>
   </div>
-</div>
+
+  <div class="insights">
+    <div class="insight">Solo el <strong>27.9%</strong> de los estudiantes alcanza nivel B1 o superior en inglés, el umbral internacional de competencia básica.</div>
+    <div class="insight b2">La brecha entre quien tiene madre con postgrado vs ninguna educación es de <strong>20.7 puntos</strong> en promedio.</div>
+    <div class="insight b3">Un estudiante con <strong>beca</strong> obtiene en promedio 30.1 puntos más que uno sin beca — la mayor brecha de toda la base.</div>
+    <div class="insight b4">Solo el <strong>9.9%</strong> de los estudiantes de estrato 6 tiene beca, frente al <strong>21.2%</strong> del estrato 2.</div>
+  </div>
+</section>
+
+<!-- ══════════ EVOLUCIÓN ══════════ -->
+<section id="evolucion">
+  <div class="section-title">Evolución histórica</div>
+  <div class="section-desc">Puntajes promedio por año y módulo. Recuerda que cada bloque usa una escala diferente: las comparaciones dentro del mismo bloque son las válidas. <strong>Bloque C (2017–2022) es el período de referencia con escala 0–300 completa.</strong></div>
+
+  <div class="chart-full card">
+    <div class="card-title"><strong>Puntaje global promedio por año</strong> · coloreado por bloque metodológico</div>
+    <div class="chart-wrap" style="height:320px"><canvas id="chEvol"></canvas></div>
+  </div>
+
+  <div class="chart-grid" style="margin-top:1.25rem">
+    <div class="card">
+      <div class="card-title"><strong>5 módulos</strong> · Bloque C 2017–2022 (escala completa)</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chModulos"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>Participantes</strong> por año</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chN"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ GÉNERO ══════════ -->
+<section id="genero">
+  <div class="section-title">Género</div>
+  <div class="section-desc">Las mujeres son mayoría (<strong>58%</strong>) y superan a los hombres en el puntaje global dentro del bloque C. La brecha más amplia está en <strong>razonamiento cuantitativo</strong> (3 pts a favor de hombres en el global), mientras que en comunicación escrita hay paridad casi total.</div>
+
+  <div class="bloque-tabs" id="genero-tabs">
+    <button class="btab active" data-b="all">Todos los bloques</button>
+    <button class="btab" data-b="A">Bloque A</button>
+    <button class="btab" data-b="B">Bloque B</button>
+    <button class="btab" data-b="C">Bloque C</button>
+    <button class="btab" data-b="D">Bloque D</button>
+  </div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Puntaje global</strong> por género y bloque</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chGenBloque"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>5 módulos</strong> · diferencia M − F · Bloque C</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chGenModulo"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-full card" style="margin-top:1.25rem">
+    <div class="card-title"><strong>% Mujeres</strong> por año</div>
+    <div class="chart-wrap" style="height:200px"><canvas id="chGenAnio"></canvas></div>
+  </div>
+</section>
+
+<!-- ══════════ ESTRATO ══════════ -->
+<section id="estrato">
+  <div class="section-title">Estrato socioeconómico</div>
+  <div class="section-desc">El estrato marca diferencias claras y <strong>consistentes en todos los bloques.</strong> La brecha entre E1 y E6 es de 15.2 puntos globales y 17.8 puntos en inglés. El 69% de los estudiantes son de estrato 2 o 3.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Puntaje global</strong> por estrato · escala completa</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chEstGlobal"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>Puntaje por módulo</strong> · comparación E1 vs E6</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chEstModulo"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-full card" style="margin-top:1.25rem">
+    <div class="card-title"><strong>Puntaje global por estrato</strong> dentro de cada bloque metodológico</div>
+    <div class="chart-wrap" style="height:260px"><canvas id="chEstBloque"></canvas></div>
+  </div>
+
+  <div class="insights" style="margin-top:1.25rem">
+    <div class="insight">La brecha E1 vs E6 se <strong>amplía en el Bloque D</strong> (2023–2024): estrato 1 = 78.9 pts, estrato 6 = 153 pts.</div>
+    <div class="insight b3">En el Bloque C (escala completa), la brecha E1–E6 es de <strong>19.3 puntos</strong> — equivalente a un semestre de ventaja.</div>
+  </div>
+</section>
+
+<!-- ══════════ INGRESO ══════════ -->
+<section id="ingreso">
+  <div class="section-title">Ingreso familiar mensual</div>
+  <div class="section-desc">El ingreso familiar muestra una correlación <strong>inversa</strong> en los bloques A y B por composición de la muestra (más estudiantes de bajos ingresos en modalidad distancia). En el Bloque D la relación es positiva y clara: a mayor ingreso, mayor puntaje.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Puntaje global</strong> por rango de ingreso · todos los bloques</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="chIngGlobal"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>Puntaje por ingreso</strong> · Bloque D 2023–2024</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="chIngBloqueD"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ EDUCACIÓN PADRES ══════════ -->
+<section id="padres">
+  <div class="section-title">Educación de los padres</div>
+  <div class="section-desc">La educación de la madre tiene una correlación de <strong>r = 0.15</strong> con el puntaje global, ligeramente mayor que la del padre (r = 0.13). La diferencia entre hijo de madre sin educación y madre con postgrado es de <strong>20.7 puntos</strong>.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Nivel educativo de la madre</strong> vs puntaje global</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="chEduMadre"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>Nivel educativo del padre</strong> vs puntaje global</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="chEduPadre"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-full card" style="margin-top:1.25rem">
+    <div class="card-title"><strong>Educación madre por bloque</strong> · la brecha crece con la escala</div>
+    <div class="chart-wrap" style="height:280px"><canvas id="chEduBloque"></canvas></div>
+  </div>
+</section>
+
+<!-- ══════════ TRABAJO ══════════ -->
+<section id="trabajo">
+  <div class="section-title">Trabajo y dedicación</div>
+  <div class="section-desc">Los estudiantes que <strong>trabajan por necesidad</strong> obtienen el puntaje más alto entre quienes tienen registro de situación laboral — dato contraintuitivo que puede explicarse por su perfil de mayor madurez y motivación. La práctica obligatoria tiene el puntaje más bajo.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Razón de trabajo</strong> vs puntaje global</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chTrabaja"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>Por qué trabaja</strong> por bloque</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chTrabajaBloque"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ MODALIDAD ══════════ -->
+<section id="modalidad">
+  <div class="section-title">Modalidad de estudio</div>
+  <div class="section-desc">La educación presencial lidera en el Bloque C, pero la distancia tradicional domina en los bloques A y B. La tendencia sugiere que el perfil del estudiante a distancia ha cambiado a lo largo del tiempo.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Puntaje por modalidad</strong> · cada bloque</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chModal"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>Participantes por modalidad</strong> a lo largo del tiempo</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chModalAnio"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ BECAS ══════════ -->
+<section id="becas">
+  <div class="section-title">Financiamiento y becas</div>
+  <div class="section-desc">La beca genera la <strong>mayor brecha de todo el análisis: 30.1 puntos</strong>. Paradójicamente, los estratos más bajos reciben menor proporción de becas que los altos — el sistema no logra compensar la desigualdad.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Con beca vs sin beca</strong> · puntaje global</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chBeca"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>% que tiene beca</strong> por estrato · ¿quién recibe la ayuda?</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="chBecaEstrato"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-full card" style="margin-top:1.25rem">
+    <div class="card-title"><strong>% con beca por ingreso familiar</strong> — los de menos recursos reciben menos becas</div>
+    <div class="chart-wrap" style="height:220px"><canvas id="chBecaIngreso"></canvas></div>
+  </div>
+
+  <div class="insights">
+    <div class="insight">El estrato 6 solo el <strong>9.9%</strong> tiene beca, pero el estrato 2 tiene <strong>21.2%</strong>. Sin embargo, la brecha de puntaje entre becados y no becados es la misma en ambos.</div>
+    <div class="insight b3">Estudiantes con ingresos de <strong>7–10 SMLV</strong> tienen apenas 7.6% de cobertura de beca — la más baja de toda la distribución de ingresos.</div>
+  </div>
+</section>
+
+<!-- ══════════ TECNOLOGÍA ══════════ -->
+<section id="tecnologia">
+  <div class="section-title">Capital tecnológico del hogar</div>
+  <div class="section-desc">Tener internet en casa marca la <strong>mayor brecha tecnológica: 28 puntos.</strong> El celular, por su alta universalización (89%), ya no diferencia. El índice de activos del hogar muestra una curva clara: a más bienes, mejores puntajes.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Brecha</strong> entre quien tiene vs no tiene cada activo</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="chTec"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>Índice de activos del hogar</strong> (0–5 bienes) vs puntaje</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="chIndice"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ INGLÉS ══════════ -->
+<section id="ingles">
+  <div class="section-title">Desempeño en inglés</div>
+  <div class="section-desc">El 48% de los estudiantes está en nivel A1 o inferior. La brecha entre estrato 1 (solo <strong>8.2%</strong> alcanza B1+) y estrato 6 (<strong>55.2%</strong> alcanza B1+) es la expresión más visible de la desigualdad educativa en Antioquia.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Distribución por nivel</strong> de inglés · todos los años</div>
+      <div class="chart-wrap" style="height:270px"><canvas id="chInglesNivel"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>% en cada nivel</strong> de inglés por estrato</div>
+      <div class="chart-wrap" style="height:270px"><canvas id="chInglesEstrato"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-full card" style="margin-top:1.25rem">
+    <div class="card-title"><strong>Evolución del nivel de inglés</strong> por bloque metodológico</div>
+    <div class="chart-wrap" style="height:240px"><canvas id="chInglesBloque"></canvas></div>
+  </div>
+</section>
+
+<!-- ══════════ CARRERAS ══════════ -->
+<section id="carreras">
+  <div class="section-title">Carreras y ocupación de los padres</div>
+  <div class="section-desc">Lenguas Modernas lidera el ranking de puntajes. Psicología combina alto volumen (14.378 estudiantes) con alto desempeño. Los estudiantes con padres en cargos directivos o gobierno obtienen los puntajes más altos.</div>
+
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title"><strong>Top 10 carreras</strong> por puntaje global promedio (n ≥ 300)</div>
+      <div class="chart-wrap" style="height:340px"><canvas id="chTopCar"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><strong>Ocupación de la madre</strong> · top y bottom</div>
+      <div class="chart-wrap" style="height:340px"><canvas id="chOcupMadre"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-full card" style="margin-top:1.25rem">
+    <div class="card-title"><strong>Carreras con menor puntaje</strong> promedio (n ≥ 300)</div>
+    <div class="chart-wrap" style="height:240px"><canvas id="chBotCar"></canvas></div>
+  </div>
+</section>
+
+<!-- ══════════ MOVILIDAD ══════════ -->
+<section id="movilidad">
+  <div class="section-title">Movilidad educativa</div>
+  <div class="section-desc">Definimos <strong>movilidad educativa</strong> como estudiantes de estrato 1–2 con madre sin título profesional que logran superar el percentil 75 (≥147.2 pts). Son <strong>18.710 estudiantes</strong> — el 15.9% de su grupo.</div>
+
+  <div class="movil-vis">
+    <div class="movil-stat">
+      <div class="movil-big">18.710</div>
+      <div class="movil-desc">estudiantes de contexto vulnerable que superan el percentil 75</div>
+    </div>
+    <div class="movil-stat">
+      <div class="movil-big" style="color:var(--accent3)">15.9%</div>
+      <div class="movil-desc">de estudiantes vulnerables logra alto desempeño · solo 1 de cada 6</div>
+    </div>
+    <div class="movil-stat">
+      <div class="movil-big" style="color:var(--accent2)">117.970</div>
+      <div class="movil-desc">estudiantes totales en contexto vulnerable (E1–E2, madre sin título)</div>
+    </div>
+    <div class="movil-stat">
+      <div class="movil-big" style="color:var(--accent)">20%</div>
+      <div class="movil-desc">de los estudiantes vulnerables de alto desempeño tiene beca</div>
+    </div>
+  </div>
+
+  <div class="chart-full card" style="margin-top:1.5rem">
+    <div class="card-title"><strong>% de movilidad</strong> por bloque metodológico (escala C como referencia)</div>
+    <div class="chart-wrap" style="height:220px"><canvas id="chMovil"></canvas></div>
+  </div>
+
+  <div class="insights" style="margin-top:1.25rem">
+    <div class="insight">En el Bloque C (2017–2022), el <strong>53.6%</strong> de vulnerables logra alto desempeño — el bloque de mayor bienestar educativo.</div>
+    <div class="insight b2">El puntaje promedio del grupo vulnerable es <strong>84.7 pts</strong>, mientras el de estrato 5–6 es 99.3 pts. La brecha persiste incluso dentro de la misma generación.</div>
+    <div class="insight b3">Solo el 20% de quienes logran movilidad tiene beca — la gran mayoría llega sola, sin apoyo institucional.</div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Datos: ICFES Saber Pro · Antioquia · 2012–2024 · Elaborado para periodismo de datos · 354.610 registros · 56 variables
+</footer>
 
 <script>
-function showTab(id, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  el.classList.add('active');
-}
+// ── DATOS ─────────────────────────────────────────────────────
+const EVOLUCION = [{"anio":2012,"n":41772,"global_mean":39.8,"ingles":56.9,"lectura":41.5,"ciudadania":47.5,"comunicacion":43.4,"cuantitativo":9.7,"bloque":"A: 2012-2013"},{"anio":2013,"n":45123,"global_mean":31.1,"ingles":45.2,"lectura":28.2,"ciudadania":33.0,"comunicacion":38.3,"cuantitativo":10.7,"bloque":"A: 2012-2013"},{"anio":2014,"n":51628,"global_mean":51.7,"ingles":56.5,"lectura":46.2,"ciudadania":54.0,"comunicacion":52.7,"cuantitativo":48.6,"bloque":"B: 2014-2015"},{"anio":2015,"n":56166,"global_mean":105.1,"ingles":108.3,"lectura":101.9,"ciudadania":106.3,"comunicacion":102.9,"cuantitativo":105.4,"bloque":"B: 2014-2015"},{"anio":2017,"n":24945,"global_mean":142.2,"ingles":147.1,"lectura":146.1,"ciudadania":138.2,"comunicacion":147.0,"cuantitativo":133.1,"bloque":"C: 2017-2022"},{"anio":2018,"n":29266,"global_mean":150.3,"ingles":154.2,"lectura":153.8,"ciudadania":145.0,"comunicacion":149.8,"cuantitativo":148.7,"bloque":"C: 2017-2022"},{"anio":2019,"n":32075,"global_mean":161.0,"ingles":165.0,"lectura":164.8,"ciudadania":155.1,"comunicacion":153.4,"cuantitativo":166.6,"bloque":"C: 2017-2022"},{"anio":2020,"n":2914,"global_mean":168.3,"ingles":174.1,"lectura":173.0,"ciudadania":161.9,"comunicacion":154.2,"cuantitativo":178.4,"bloque":"C: 2017-2022"},{"anio":2021,"n":3057,"global_mean":167.2,"ingles":172.3,"lectura":168.8,"ciudadania":159.5,"comunicacion":154.5,"cuantitativo":180.7,"bloque":"C: 2017-2022"},{"anio":2022,"n":5802,"global_mean":171.5,"ingles":177.0,"lectura":174.8,"ciudadania":164.1,"comunicacion":156.9,"cuantitativo":184.4,"bloque":"C: 2017-2022"},{"anio":2023,"n":28537,"global_mean":151.2,"ingles":158.4,"lectura":151.9,"ciudadania":140.2,"comunicacion":131.8,"cuantitativo":173.1,"bloque":"D: 2023-2024"},{"anio":2024,"n":33316,"global_mean":53.9,"ingles":58.9,"lectura":43.5,"ciudadania":30.2,"comunicacion":42.2,"cuantitativo":94.3,"bloque":"D: 2023-2024"}];
 
-function exportChart(canvasId, name) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) { alert('Gráfico no encontrado: ' + canvasId); return; }
-  const link = document.createElement('a');
-  link.download = 'electoral_' + name + '.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-}
+const GENERO_BLOQUE = [{"bloque":"A: 2012-2013","genero":"F","punt_global":34.7},{"bloque":"A: 2012-2013","genero":"M","punt_global":36.0},{"bloque":"B: 2014-2015","genero":"F","punt_global":86.6},{"bloque":"B: 2014-2015","genero":"M","punt_global":69.8},{"bloque":"C: 2017-2022","genero":"F","punt_global":154.2},{"bloque":"C: 2017-2022","genero":"M","punt_global":153.9},{"bloque":"D: 2023-2024","genero":"F","punt_global":87.0},{"bloque":"D: 2023-2024","genero":"M","punt_global":115.0}];
 
-function exportAllCharts() {
-  const charts = [
-    ['chartVotos','votos_subregion'],
-    ['chartLineas','serie_tiempo'],
-    ['chartAbstencion','abstencion'],
-    ['chartPartic','participacion'],
-    ['chartEspeciales','votos_especiales'],
-    ['chartBlancoSub','votos_blanco_subregion'],
-    ['chartResumen','resumen_tendencia']
-  ];
-  charts.forEach(([id, name], i) => {
-    setTimeout(() => {
-      const canvas = document.getElementById(id);
-      if (canvas) {
-        const link = document.createElement('a');
-        link.download = 'electoral_' + name + '.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      }
-    }, i * 400);
-  });
-}
+const GENERO_MODULO = [{"bloque":"A: 2012-2013","genero":"F","ingles":51.6,"lectura":33.8,"ciudadania":39.3,"comunicacion":38.7,"cuantitativo":10.1,"global":34.7},{"bloque":"A: 2012-2013","genero":"M","ingles":49.8,"lectura":35.7,"ciudadania":40.8,"comunicacion":43.5,"cuantitativo":10.3,"global":36.0},{"bloque":"B: 2014-2015","genero":"F","ingles":90.6,"lectura":82.4,"ciudadania":88.7,"comunicacion":83.6,"cuantitativo":86.8,"global":86.6},{"bloque":"B: 2014-2015","genero":"M","ingles":73.6,"lectura":65.5,"ciudadania":70.9,"comunicacion":71.7,"cuantitativo":66.3,"global":69.8},{"bloque":"C: 2017-2022","genero":"F","ingles":157.8,"lectura":158.7,"ciudadania":149.1,"comunicacion":152.0,"cuantitativo":153.2,"global":154.2},{"bloque":"C: 2017-2022","genero":"M","ingles":159.3,"lectura":156.3,"ciudadania":148.0,"comunicacion":149.5,"cuantitativo":156.5,"global":153.9},{"bloque":"D: 2023-2024","genero":"F","ingles":93.8,"lectura":80.4,"ciudadania":68.1,"comunicacion":72.2,"cuantitativo":120.1,"global":87.0},{"bloque":"D: 2023-2024","genero":"M","ingles":120.1,"lectura":111.6,"ciudadania":98.7,"comunicacion":98.6,"cuantitativo":145.1,"global":115.0}];
 
-const subregions = ['Bajo Cauca','Mag. Medio','Nordeste','Norte','Occidente','Oriente','Suroeste','Urabá','Valle Aburrá'];
-const gridColor = 'rgba(0,0,0,0.07)';
-const labelColor = '#555';
+const GEN_PCT_ANIO = [{"anio":2012,"F":63.0,"M":37.0},{"anio":2013,"F":50.4,"M":49.6},{"anio":2014,"F":50.8,"M":49.2},{"anio":2015,"F":64.7,"M":35.3},{"anio":2017,"F":64.4,"M":35.6},{"anio":2018,"F":61.6,"M":38.4},{"anio":2019,"F":56.7,"M":43.3},{"anio":2020,"F":51.3,"M":48.7},{"anio":2021,"F":50.2,"M":49.8},{"anio":2022,"F":48.8,"M":51.2},{"anio":2023,"F":49.0,"M":51.0},{"anio":2024,"F":65.4,"M":34.6}];
 
-const baseOpts = (tickCb) => ({
-  responsive: true, maintainAspectRatio: false,
-  plugins: { legend: { display: false } },
-  scales: {
-    x: { ticks: { color: labelColor, font: { size: 11 } }, grid: { color: gridColor } },
-    y: { ticks: { color: labelColor, font: { size: 11 }, callback: tickCb || (v=>v) }, grid: { color: gridColor } }
-  }
-});
+const ESTRATO = [{"estrato":"Estrato 1","MOD_INGLES_PUNT":95.2,"MOD_LECTURA_CRITICA_PUNT":87.4,"MOD_COMPETEN_CIUDADA_PUNT":85.9,"MOD_COMUNI_ESCRITA_PUNT":84.4,"MOD_RAZONA_CUANTITAT_PUNT":87.4,"punt_global":88.2,"n":33445},{"estrato":"Estrato 2","MOD_INGLES_PUNT":96.2,"MOD_LECTURA_CRITICA_PUNT":86.8,"MOD_COMPETEN_CIUDADA_PUNT":85.9,"MOD_COMUNI_ESCRITA_PUNT":85.2,"MOD_RAZONA_CUANTITAT_PUNT":87.8,"punt_global":88.5,"n":111618},{"estrato":"Estrato 3","MOD_INGLES_PUNT":99.4,"MOD_LECTURA_CRITICA_PUNT":90.6,"MOD_COMPETEN_CIUDADA_PUNT":89.3,"MOD_COMUNI_ESCRITA_PUNT":89.7,"MOD_RAZONA_CUANTITAT_PUNT":91.3,"punt_global":92.2,"n":133500},{"estrato":"Estrato 4","MOD_INGLES_PUNT":105.0,"MOD_LECTURA_CRITICA_PUNT":96.7,"MOD_COMPETEN_CIUDADA_PUNT":94.9,"MOD_COMUNI_ESCRITA_PUNT":95.1,"MOD_RAZONA_CUANTITAT_PUNT":97.0,"punt_global":97.9,"n":36859},{"estrato":"Estrato 5","MOD_INGLES_PUNT":104.9,"MOD_LECTURA_CRITICA_PUNT":96.1,"MOD_COMPETEN_CIUDADA_PUNT":94.0,"MOD_COMUNI_ESCRITA_PUNT":94.7,"MOD_RAZONA_CUANTITAT_PUNT":96.8,"punt_global":97.4,"n":20309},{"estrato":"Estrato 6","MOD_INGLES_PUNT":113.1,"MOD_LECTURA_CRITICA_PUNT":101.5,"MOD_COMPETEN_CIUDADA_PUNT":99.3,"MOD_COMUNI_ESCRITA_PUNT":101.3,"MOD_RAZONA_CUANTITAT_PUNT":101.5,"punt_global":103.4,"n":9255}];
 
-new Chart(document.getElementById('chartVotos'), {
-  type: 'bar',
-  data: { labels: subregions, datasets: [
-    { label: '2010', data: [48072,26846,36070,60085,56379,205086,112279,117753,1096137], backgroundColor: '#3266ad' },
-    { label: '2014', data: [62867,32922,41655,71930,72633,243038,125111,159760,1238127], backgroundColor: '#5c9dd6' },
-    { label: '2018', data: [64083,39685,52887,86549,81049,313485,143202,167625,1641971], backgroundColor: '#f0a500' },
-    { label: '2022', data: [75308,45630,62403,93395,86183,352892,151155,198378,1835672], backgroundColor: '#d85a30' }
-  ]},
-  options: { ...baseOpts(v => v>=1000000?(v/1000000).toFixed(1)+'M':v>=1000?Math.round(v/1000)+'k':v), plugins: { legend: { display: true, labels: { font:{size:12}, color: labelColor, boxWidth: 12 } } } }
-});
+const ESTRATO_BLOQUE = [{"bloque":"A: 2012-2013","estrato":"Estrato 1","punt_global":42.7},{"bloque":"A: 2012-2013","estrato":"Estrato 2","punt_global":37.7},{"bloque":"A: 2012-2013","estrato":"Estrato 3","punt_global":34.2},{"bloque":"A: 2012-2013","estrato":"Estrato 4","punt_global":30.5},{"bloque":"A: 2012-2013","estrato":"Estrato 5","punt_global":27.3},{"bloque":"A: 2012-2013","estrato":"Estrato 6","punt_global":25.1},{"bloque":"B: 2014-2015","estrato":"Estrato 1","punt_global":87.5},{"bloque":"B: 2014-2015","estrato":"Estrato 2","punt_global":81.9},{"bloque":"B: 2014-2015","estrato":"Estrato 3","punt_global":78.6},{"bloque":"B: 2014-2015","estrato":"Estrato 4","punt_global":73.6},{"bloque":"B: 2014-2015","estrato":"Estrato 5","punt_global":62.1},{"bloque":"B: 2014-2015","estrato":"Estrato 6","punt_global":55.5},{"bloque":"C: 2017-2022","estrato":"Estrato 1","punt_global":148.1},{"bloque":"C: 2017-2022","estrato":"Estrato 2","punt_global":151.1},{"bloque":"C: 2017-2022","estrato":"Estrato 3","punt_global":154.0},{"bloque":"C: 2017-2022","estrato":"Estrato 4","punt_global":158.3},{"bloque":"C: 2017-2022","estrato":"Estrato 5","punt_global":162.6},{"bloque":"C: 2017-2022","estrato":"Estrato 6","punt_global":167.4},{"bloque":"D: 2023-2024","estrato":"Estrato 1","punt_global":78.9},{"bloque":"D: 2023-2024","estrato":"Estrato 2","punt_global":84.5},{"bloque":"D: 2023-2024","estrato":"Estrato 3","punt_global":98.2},{"bloque":"D: 2023-2024","estrato":"Estrato 4","punt_global":118.6},{"bloque":"D: 2023-2024","estrato":"Estrato 5","punt_global":133.0},{"bloque":"D: 2023-2024","estrato":"Estrato 6","punt_global":153.0}];
 
-new Chart(document.getElementById('chartLineas'), {
-  type: 'line',
-  data: { labels: [2010,2014,2018,2022], datasets: [
-    { label: 'Bajo Cauca', data: [48072,62867,64083,75308], borderColor: '#d85a30', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
-    { label: 'Nordeste', data: [36070,41655,52887,62403], borderColor: '#3266ad', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
-    { label: 'Norte', data: [60085,71930,86549,93395], borderColor: '#f0a500', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
-    { label: 'Urabá', data: [117753,159760,167625,198378], borderColor: '#639922', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
-    { label: 'Mag. Medio', data: [26846,32922,39685,45630], borderColor: '#7F77DD', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
-    { label: 'Occidente', data: [56379,72633,81049,86183], borderColor: '#888780', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 },
-    { label: 'Suroeste', data: [112279,125111,143202,151155], borderColor: '#ea6350', backgroundColor: 'transparent', tension: 0.3, pointRadius: 4 }
-  ]},
-  options: { responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: true, labels: { font:{size:11}, color: labelColor, boxWidth: 12 } } },
-    scales: { x: { ticks: { color: labelColor }, grid: { color: gridColor } }, y: { ticks: { color: labelColor, callback: v => Math.round(v/1000)+'k' }, grid: { color: gridColor } } }
-  }
-});
+const INGRESO = [{"ingreso_label":"Menos de 1 SMLV","punt_global":53.1,"n":18315},{"ingreso_label":"Entre 1 y menos de 2 SMLV","punt_global":47.9,"n":77382},{"ingreso_label":"Entre 2 y menos de 3 SMLV","punt_global":43.3,"n":47789},{"ingreso_label":"Entre 3 y menos de 5 SMLV","punt_global":38.7,"n":29691},{"ingreso_label":"Entre 5 y menos de 7 SMLV","punt_global":33.8,"n":9420},{"ingreso_label":"Entre 7 y menos de 10 SMLV","punt_global":30.3,"n":5053}];
 
-const absData = {
-  '2010': [28.3,37.2,30.3,33.1,37.9,48.3,40.8,35.1,47.5],
-  '2014': [34.9,42.5,33.6,38.8,45.7,51.9,44.3,44.4,49.0],
-  '2018': [30.8,47.1,39.2,42.9,48.3,58.8,47.8,42.1,56.8],
-  '2022': [35.3,51.4,41.9,45.1,48.3,59.6,49.0,45.7,58.7]
+const INGRESO_D = [{"ingreso_label":"Menos de 1 SMLV","punt_global":59.0},{"ingreso_label":"Entre 1 y menos de 2 SMLV","punt_global":56.2},{"ingreso_label":"Entre 2 y menos de 3 SMLV","punt_global":53.0},{"ingreso_label":"Entre 3 y menos de 5 SMLV","punt_global":50.3},{"ingreso_label":"Entre 5 y menos de 7 SMLV","punt_global":46.8},{"ingreso_label":"Entre 7 y menos de 10 SMLV","punt_global":44.8}];
+
+const EDU_MADRE = [{"edu_madre":"Ninguno","mean":91.4,"n":8499},{"edu_madre":"Primaria incompleta","mean":85.6,"n":56848},{"edu_madre":"Primaria completa","mean":79.5,"n":38196},{"edu_madre":"Bachillerato incompleto","mean":81.2,"n":49773},{"edu_madre":"Bachillerato completo","mean":91.3,"n":80905},{"edu_madre":"Técnica incompleta","mean":100.9,"n":10818},{"edu_madre":"Técnica completa","mean":102.5,"n":41721},{"edu_madre":"Prof. incompleta","mean":107.0,"n":6326},{"edu_madre":"Prof. completa","mean":105.7,"n":35439},{"edu_madre":"Postgrado","mean":112.0,"n":17008}];
+
+const EDU_PADRE = [{"edu_padre":"Ninguno","mean":82.1,"n":18784},{"edu_padre":"Primaria incompleta","mean":87.0,"n":71529},{"edu_padre":"Primaria completa","mean":80.2,"n":37068},{"edu_padre":"Bachillerato incompleto","mean":84.1,"n":44073},{"edu_padre":"Bachillerato completo","mean":91.8,"n":70155},{"edu_padre":"Técnica incompleta","mean":96.3,"n":8641},{"edu_padre":"Técnica completa","mean":99.5,"n":29573},{"edu_padre":"Prof. incompleta","mean":101.9,"n":7744},{"edu_padre":"Prof. completa","mean":101.5,"n":36243},{"edu_padre":"Postgrado","mean":111.5,"n":17099}];
+
+const EDU_M_BL = [{"bloque":"B: 2014-2015","edu_madre":"Ninguno","punt_global":95.4},{"bloque":"B: 2014-2015","edu_madre":"Primaria incompleta","punt_global":87.0},{"bloque":"B: 2014-2015","edu_madre":"Bachillerato completo","punt_global":77.7},{"bloque":"B: 2014-2015","edu_madre":"Técnica completa","punt_global":78.7},{"bloque":"B: 2014-2015","edu_madre":"Prof. completa","punt_global":70.7},{"bloque":"B: 2014-2015","edu_madre":"Postgrado","punt_global":66.6},{"bloque":"C: 2017-2022","edu_madre":"Ninguno","punt_global":144.0},{"bloque":"C: 2017-2022","edu_madre":"Primaria incompleta","punt_global":147.4},{"bloque":"C: 2017-2022","edu_madre":"Bachillerato completo","punt_global":153.6},{"bloque":"C: 2017-2022","edu_madre":"Técnica completa","punt_global":156.5},{"bloque":"C: 2017-2022","edu_madre":"Prof. completa","punt_global":161.1},{"bloque":"C: 2017-2022","edu_madre":"Postgrado","punt_global":164.1},{"bloque":"D: 2023-2024","edu_madre":"Ninguno","punt_global":69.6},{"bloque":"D: 2023-2024","edu_madre":"Primaria incompleta","punt_global":70.9},{"bloque":"D: 2023-2024","edu_madre":"Bachillerato completo","punt_global":95.9},{"bloque":"D: 2023-2024","edu_madre":"Técnica completa","punt_global":119.5},{"bloque":"D: 2023-2024","edu_madre":"Prof. completa","punt_global":139.1},{"bloque":"D: 2023-2024","edu_madre":"Postgrado","punt_global":152.5}];
+
+const TRABAJA = [{"trabaja":"No trabaja","punt_global":43.7,"n":77228},{"trabaja":"Trabaja (experiencia)","punt_global":43.2,"n":27654},{"trabaja":"Práctica obligatoria","punt_global":41.3,"n":25548},{"trabaja":"Trabaja (necesidad)","punt_global":46.1,"n":61797}];
+
+const TRABAJA_BL = [{"bloque":"A: 2012-2013","trabaja":"No trabaja","punt_global":34.5},{"bloque":"A: 2012-2013","trabaja":"Trabaja (necesidad)","punt_global":36.8},{"bloque":"B: 2014-2015","trabaja":"No trabaja","punt_global":48.9},{"bloque":"B: 2014-2015","trabaja":"Trabaja (necesidad)","punt_global":53.6},{"bloque":"D: 2023-2024","trabaja":"No trabaja","punt_global":54.3},{"bloque":"D: 2023-2024","trabaja":"Trabaja (necesidad)","punt_global":54.5}];
+
+const MODAL_BL = [{"bloque":"A: 2012-2013","modalidad":"Dist. Tradicional","punt_global":41.5},{"bloque":"A: 2012-2013","modalidad":"Presencial","punt_global":33.2},{"bloque":"B: 2014-2015","modalidad":"Dist. Tradicional","punt_global":83.1},{"bloque":"B: 2014-2015","modalidad":"Presencial","punt_global":78.0},{"bloque":"C: 2017-2022","modalidad":"Dist. Tradicional","punt_global":147.9},{"bloque":"C: 2017-2022","modalidad":"Presencial","punt_global":155.2},{"bloque":"D: 2023-2024","modalidad":"Dist. Tradicional","punt_global":71.1},{"bloque":"D: 2023-2024","modalidad":"Presencial","punt_global":107.0}];
+
+const MODAL_ANIO = [{"anio":2012,"Dist. Tradicional":11780,"Presencial":29912},{"anio":2013,"Dist. Tradicional":10113,"Presencial":34961},{"anio":2014,"Dist. Tradicional":11911,"Presencial":39551},{"anio":2015,"Dist. Tradicional":15206,"Presencial":40527},{"anio":2017,"Dist. Tradicional":4740,"Presencial":19989},{"anio":2018,"Dist. Tradicional":4620,"Presencial":24422},{"anio":2019,"Dist. Tradicional":3955,"Presencial":27954},{"anio":2020,"Dist. Tradicional":269,"Presencial":2634},{"anio":2021,"Dist. Tradicional":294,"Presencial":2751},{"anio":2022,"Dist. Tradicional":495,"Presencial":5272},{"anio":2023,"Dist. Tradicional":3601,"Presencial":24748},{"anio":2024,"Dist. Tradicional":10478,"Presencial":22685}];
+
+const BECA = [{"beca":"No","mean":86.9,"count":286593},{"beca":"Si","mean":117.0,"count":68008}];
+const BECA_EST = [{"estrato":"Estrato 1","No":79.2,"Si":20.8},{"estrato":"Estrato 2","No":78.8,"Si":21.2},{"estrato":"Estrato 3","No":80.3,"Si":19.7},{"estrato":"Estrato 4","No":84.4,"Si":15.6},{"estrato":"Estrato 5","No":87.9,"Si":12.1},{"estrato":"Estrato 6","No":90.1,"Si":9.9}];
+const BECA_ING = [{"ingreso_label":"Menos de 1 SMLV","Si":9.7},{"ingreso_label":"Entre 1 y menos de 2 SMLV","Si":11.2},{"ingreso_label":"Entre 2 y menos de 3 SMLV","Si":12.3},{"ingreso_label":"Entre 3 y menos de 5 SMLV","Si":12.3},{"ingreso_label":"Entre 5 y menos de 7 SMLV","Si":10.4},{"ingreso_label":"Entre 7 y menos de 10 SMLV","Si":7.6}];
+
+const TEC = [{"activo":"Internet","brecha":28.0,"pct_si":85.8},{"activo":"Lavadora","brecha":17.0,"pct_si":86.7},{"activo":"Microondas","brecha":14.7,"pct_si":60.2},{"activo":"Computador","brecha":12.6,"pct_si":89.7},{"activo":"Automóvil","brecha":11.9,"pct_si":29.8},{"activo":"Celular","brecha":0.4,"pct_si":89.4}];
+const INDICE = [{"indice_activos":0,"mean":85.0,"count":19149},{"indice_activos":1,"mean":70.9,"count":22178},{"indice_activos":2,"mean":72.8,"count":47810},{"indice_activos":3,"mean":84.3,"count":86782},{"indice_activos":4,"mean":97.9,"count":109275},{"indice_activos":5,"mean":117.4,"count":69407}];
+
+const INGLES_NV = [{"nivel":"A-","n":63210,"pct":17.8},{"nivel":"A1","n":106348,"pct":30.0},{"nivel":"A2","n":86150,"pct":24.3},{"nivel":"B1","n":62397,"pct":17.6},{"nivel":"B2","n":19878,"pct":5.6},{"nivel":"B+","n":16545,"pct":4.7}];
+const INGLES_EST = [{"estrato":"Estrato 1","A-":29.2,"A1":39.4,"A2":21.9,"B1":7.5,"B2":1.2,"B+":0.7},{"estrato":"Estrato 2","A-":22.3,"A1":35.8,"A2":25.6,"B1":12.3,"B2":2.3,"B+":1.7},{"estrato":"Estrato 3","A-":16.0,"A1":29.8,"A2":26.4,"B1":19.2,"B2":4.6,"B+":4.0},{"estrato":"Estrato 4","A-":9.6,"A1":20.9,"A2":23.2,"B1":27.1,"B2":10.4,"B+":8.8},{"estrato":"Estrato 5","A-":5.9,"A1":12.6,"A2":16.3,"B1":31.2,"B2":17.3,"B+":16.7},{"estrato":"Estrato 6","A-":2.6,"A1":5.3,"A2":8.9,"B1":27.9,"B2":29.0,"B+":26.3}];
+const INGLES_BL = [{"bloque":"A: 2012-2013","A-":23.3,"A1":37.8,"A2":16.9,"B1":14.4,"B2":0.0,"B+":7.6},{"bloque":"B: 2014-2015","A-":21.2,"A1":33.7,"A2":22.9,"B1":12.9,"B2":1.2,"B+":8.1},{"bloque":"C: 2017-2022","A-":6.6,"A1":19.2,"A2":38.4,"B1":25.2,"B2":10.7,"B+":0.0},{"bloque":"D: 2023-2024","A-":22.2,"A1":29.6,"A2":14.8,"B1":18.2,"B2":13.1,"B+":2.1}];
+
+const TOP_CAR = [{"nucleo":"LENGUAS MODERNAS, LITERATURA, LINGUISTICA Y AFINES","mean":134.6,"count":1037},{"nucleo":"MEDICINA VETERINARIA","mean":121.3,"count":2443},{"nucleo":"PSICOLOGIA","mean":120.0,"count":14378},{"nucleo":"NUTRICION Y DIETETICA","mean":118.0,"count":1274},{"nucleo":"SOCIOLOGIA, TRABAJO SOCIAL Y AFINES","mean":116.1,"count":6747},{"nucleo":"DEPORTES, EDUCACION FISICA Y RECREACION","mean":114.1,"count":1678},{"nucleo":"MATEMATICAS, ESTADISTICA Y AFINES","mean":113.5,"count":543},{"nucleo":"MEDICINA","mean":113.1,"count":7057},{"nucleo":"ANTROPOLOGIA, ARTES LIBERALES","mean":112.5,"count":539},{"nucleo":"TERAPIAS","mean":110.9,"count":2781}];
+const BOT_CAR = [{"nucleo":"NORMALES SUPERIORES","mean":56.7,"count":2919},{"nucleo":"FORMACION RELACIONADA CON EL CAMPO MILITAR O POLICIAL","mean":60.0,"count":2897},{"nucleo":"AGRONOMIA","mean":60.2,"count":3000},{"nucleo":"OTROS PROGRAMAS ASOCIADOS A BELLAS ARTES","mean":71.1,"count":1019},{"nucleo":"INGENIERIA ELECTRONICA, TELECOMUNICACIONES Y AFINES","mean":71.8,"count":6094},{"nucleo":"ECONOMIA","mean":76.5,"count":6425}];
+const OCUP_M = [{"ocupacion":"Empleado director/gerente","mean":163.8},{"ocupacion":"Obrero empresa particular","mean":160.9},{"ocupacion":"Profesional independiente","mean":160.5},{"ocupacion":"Obrero del gobierno","mean":159.8},{"ocupacion":"Desempleada","mean":154.5},{"ocupacion":"Empleado doméstico","mean":151.3},{"ocupacion":"Empleado nivel técnico","mean":88.0},{"ocupacion":"Trabaj. cuenta propia","mean":86.1},{"ocupacion":"Pensionada","mean":83.2},{"ocupacion":"Empleado auxiliar/admin","mean":79.5},{"ocupacion":"Hogar","mean":70.3},{"ocupacion":"Obrero/operario","mean":66.1}];
+const MOVIL_BL = [{"bloque":"B: 2014-2015","pct_mov":3.1},{"bloque":"C: 2017-2022","pct_mov":53.6},{"bloque":"D: 2023-2024","pct_mov":16.0}];
+
+// ── COLORES ──────────────────────────────────────────────────
+const C = {
+  accent: '#f4a535', accent2: '#5b8cf7', accent3: '#e05c7b',
+  accent4: '#3ecfa0', accent5: '#b06bff',
+  blqA: '#e05c7b', blqB: '#f4a535', blqC: '#3ecfa0', blqD: '#5b8cf7',
+  muted: '#6b7280', text: '#e8eaf0',
+  ingles: { 'A-':'#e05c7b','A1':'#f4a535','A2':'#f4c535','B1':'#3ecfa0','B2':'#5b8cf7','B+':'#b06bff' }
 };
-new Chart(document.getElementById('chartAbstencion'), {
-  type: 'bar',
-  data: { labels: subregions, datasets: [
-    { label: '2010', data: absData['2010'].map(v=>+(100-v).toFixed(1)), backgroundColor: '#3266ad' },
-    { label: '2014', data: absData['2014'].map(v=>+(100-v).toFixed(1)), backgroundColor: '#5c9dd6' },
-    { label: '2018', data: absData['2018'].map(v=>+(100-v).toFixed(1)), backgroundColor: '#f0a500' },
-    { label: '2022', data: absData['2022'].map(v=>+(100-v).toFixed(1)), backgroundColor: '#d85a30' }
-  ]},
-  options: { ...baseOpts(v=>v+'%'), plugins: { legend: { display: true, labels: { font:{size:12}, color: labelColor, boxWidth: 12 } } }, scales: { x: { ticks: { color: labelColor, font:{size:10} }, grid: { color: gridColor } }, y: { min: 30, max: 90, ticks: { color: labelColor, callback: v=>v+'%' }, grid: { color: gridColor } } } }
-});
 
-new Chart(document.getElementById('chartPartic'), {
-  type: 'bar',
-  data: { labels: subregions, datasets: [
-    { label: '2010', data: absData['2010'], backgroundColor: '#3266ad' },
-    { label: '2014', data: absData['2014'], backgroundColor: '#5c9dd6' },
-    { label: '2018', data: absData['2018'], backgroundColor: '#f0a500' },
-    { label: '2022', data: absData['2022'], backgroundColor: '#639922' }
-  ]},
-  options: { ...baseOpts(v=>v+'%'), plugins: { legend: { display: true, labels: { font:{size:12}, color: labelColor, boxWidth: 12 } } }, scales: { x: { ticks: { color: labelColor, font:{size:10} }, grid: { color: gridColor } }, y: { min: 0, max: 75, ticks: { color: labelColor, callback: v=>v+'%' }, grid: { color: gridColor } } } }
-});
+const blqColor = b => b.includes('A') ? C.blqA : b.includes('B') ? C.blqB : b.includes('C') ? C.blqC : C.blqD;
+const blqColors = bloques => bloques.map(b => blqColor(b));
 
-new Chart(document.getElementById('chartEspeciales'), {
-  type: 'bar',
-  data: { labels: [2010,2014,2018,2022], datasets: [
-    { label: 'Votos en blanco', data: [75572,124919,139613,85523], backgroundColor: '#3266ad' },
-    { label: 'Votos nulos', data: [33718,71596,38417,41723], backgroundColor: '#d85a30' },
-    { label: 'Tarjetas no marcadas', data: [5944,7936,4825,3646], backgroundColor: '#888780' }
-  ]},
-  options: { responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: true, labels: { font:{size:12}, color: labelColor, boxWidth: 12 } } },
-    scales: { x: { ticks: { color: labelColor }, grid: { color: gridColor } }, y: { ticks: { color: labelColor, callback: v => Math.round(v/1000)+'k' }, grid: { color: gridColor } } }
+const defOpts = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { labels: { color: C.muted, font: { family: 'DM Mono', size: 10 } } }, tooltip: { backgroundColor: '#1a1e2a', borderColor: '#252a38', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#a0a9b8' } },
+  scales: {
+    x: { ticks: { color: C.muted, font: { family: 'DM Mono', size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+    y: { ticks: { color: C.muted, font: { family: 'DM Mono', size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
   }
-});
+};
+const hOpts = JSON.parse(JSON.stringify(defOpts));
+hOpts.indexAxis = 'y';
 
-new Chart(document.getElementById('chartBlancoSub'), {
-  type: 'bar',
-  data: { labels: subregions, datasets: [
-    { label: '2010', data: [1401,784,1338,2965,2009,7068,3366,3732,52909], backgroundColor: '#3266ad' },
-    { label: '2022', data: [1760,756,1778,3090,1918,8347,3343,4586,59945], backgroundColor: '#639922' }
-  ]},
-  options: { ...baseOpts(v=>v>=1000?Math.round(v/1000)+'k':v), plugins: { legend: { display: true, labels: { font:{size:12}, color: labelColor, boxWidth: 12 } } } }
-});
+function mk(id, type, data, opts) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  new Chart(ctx, { type, data, options: { ...defOpts, ...opts } });
+}
 
-new Chart(document.getElementById('chartResumen'), {
-  type: 'line',
-  data: { labels: [2010,2014,2018,2022], datasets: [
-    { label: 'Participación promedio', data: [38.2,43.8,46.6,52.5], borderColor: '#639922', backgroundColor: 'rgba(99,153,34,0.1)', fill: true, tension: 0.3, pointRadius: 6, pointBackgroundColor: '#639922' },
-    { label: 'Abstención promedio', data: [61.8,56.2,53.4,47.5], borderColor: '#d85a30', backgroundColor: 'rgba(216,90,48,0.1)', fill: true, tension: 0.3, pointRadius: 6, borderDash: [6,3], pointBackgroundColor: '#d85a30' }
-  ]},
-  options: { responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: true, labels: { font:{size:13}, color: labelColor, boxWidth: 14 } } },
-    scales: { x: { ticks: { color: labelColor }, grid: { color: gridColor } }, y: { min: 30, max: 75, ticks: { color: labelColor, callback: v=>v+'%' }, grid: { color: gridColor } } }
-  }
-});
+// ── CHARTS ───────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+
+// EVOLUCIÓN
+mk('chEvol', 'bar', {
+  labels: EVOLUCION.map(d => d.anio),
+  datasets: [{
+    label: 'Puntaje global promedio',
+    data: EVOLUCION.map(d => d.global_mean),
+    backgroundColor: EVOLUCION.map(d => blqColor(d.bloque)),
+    borderRadius: 4,
+  }]
+}, { plugins: { legend: { display: false }, tooltip: { callbacks: { afterLabel: ctx => '  Bloque: ' + EVOLUCION[ctx.dataIndex].bloque } } } });
+
+// MÓDULOS bloque C
+const C17 = EVOLUCION.filter(d => d.bloque === 'C: 2017-2022');
+mk('chModulos', 'bar', {
+  labels: C17.map(d => d.anio),
+  datasets: [
+    { label: 'Inglés', data: C17.map(d => d.ingles), backgroundColor: C.accent, borderRadius: 3 },
+    { label: 'Lectura', data: C17.map(d => d.lectura), backgroundColor: C.accent2, borderRadius: 3 },
+    { label: 'Ciudadanía', data: C17.map(d => d.ciudadania), backgroundColor: C.accent3, borderRadius: 3 },
+    { label: 'Comunicación', data: C17.map(d => d.comunicacion), backgroundColor: C.accent4, borderRadius: 3 },
+    { label: 'Cuantitativo', data: C17.map(d => d.cuantitativo), backgroundColor: C.accent5, borderRadius: 3 },
+  ]
+}, {});
+
+// N por año
+mk('chN', 'bar', {
+  labels: EVOLUCION.map(d => d.anio),
+  datasets: [{ label: 'Estudiantes', data: EVOLUCION.map(d => d.n), backgroundColor: EVOLUCION.map(d => blqColor(d.bloque) + 'aa'), borderRadius: 3 }]
+}, { plugins: { legend: { display: false } } });
+
+// GÉNERO × BLOQUE
+const bloques4 = ['A: 2012-2013','B: 2014-2015','C: 2017-2022','D: 2023-2024'];
+const genF = bloques4.map(b => { const r = GENERO_BLOQUE.find(d => d.bloque===b && d.genero==='F'); return r ? r.punt_global : null; });
+const genM = bloques4.map(b => { const r = GENERO_BLOQUE.find(d => d.bloque===b && d.genero==='M'); return r ? r.punt_global : null; });
+mk('chGenBloque', 'bar', {
+  labels: bloques4.map(b => b.split(':')[0].trim()),
+  datasets: [
+    { label: 'Mujeres (F)', data: genF, backgroundColor: C.accent3 + 'cc', borderRadius: 4 },
+    { label: 'Hombres (M)', data: genM, backgroundColor: C.accent2 + 'cc', borderRadius: 4 },
+  ]
+}, {});
+
+// GÉNERO × MÓDULO (diferencias en C)
+const gcF = GENERO_MODULO.find(d => d.bloque==='C: 2017-2022' && d.genero==='F');
+const gcM = GENERO_MODULO.find(d => d.bloque==='C: 2017-2022' && d.genero==='M');
+const mods = ['ingles','lectura','ciudadania','comunicacion','cuantitativo'];
+const modLabels = ['Inglés','Lectura','Ciudadanía','Comunicación','Cuantitativo'];
+mk('chGenModulo', 'bar', {
+  labels: modLabels,
+  datasets: [
+    { label: 'Mujeres', data: mods.map(m => gcF[m]), backgroundColor: C.accent3 + 'cc', borderRadius: 4 },
+    { label: 'Hombres', data: mods.map(m => gcM[m]), backgroundColor: C.accent2 + 'cc', borderRadius: 4 },
+  ]
+}, {});
+
+// % MUJERES POR AÑO
+mk('chGenAnio', 'line', {
+  labels: GEN_PCT_ANIO.map(d => d.anio),
+  datasets: [
+    { label: '% Mujeres', data: GEN_PCT_ANIO.map(d => d.F), borderColor: C.accent3, backgroundColor: C.accent3+'22', fill: true, tension: 0.3, pointRadius: 4 },
+    { label: '% Hombres', data: GEN_PCT_ANIO.map(d => d.M), borderColor: C.accent2, backgroundColor: C.accent2+'22', fill: true, tension: 0.3, pointRadius: 4 },
+  ]
+}, {});
+
+// ESTRATO GLOBAL
+mk('chEstGlobal', 'bar', {
+  labels: ESTRATO.map(d => d.estrato),
+  datasets: [{
+    label: 'Puntaje global',
+    data: ESTRATO.map(d => d.punt_global),
+    backgroundColor: ESTRATO.map((d,i) => `hsl(${140+i*20},60%,${40+i*5}%)`),
+    borderRadius: 4,
+  }]
+}, { plugins: { legend: { display: false } } });
+
+// E1 vs E6 por módulo
+const e1 = ESTRATO.find(d => d.estrato==='Estrato 1');
+const e6 = ESTRATO.find(d => d.estrato==='Estrato 6');
+mk('chEstModulo', 'bar', {
+  labels: modLabels,
+  datasets: [
+    { label: 'Estrato 1', data: mods.map(m => { const k = {ingles:'MOD_INGLES_PUNT',lectura:'MOD_LECTURA_CRITICA_PUNT',ciudadania:'MOD_COMPETEN_CIUDADA_PUNT',comunicacion:'MOD_COMUNI_ESCRITA_PUNT',cuantitativo:'MOD_RAZONA_CUANTITAT_PUNT'}[m]; return e1[k]; }), backgroundColor: C.accent3+'cc', borderRadius: 4 },
+    { label: 'Estrato 6', data: mods.map(m => { const k = {ingles:'MOD_INGLES_PUNT',lectura:'MOD_LECTURA_CRITICA_PUNT',ciudadania:'MOD_COMPETEN_CIUDADA_PUNT',comunicacion:'MOD_COMUNI_ESCRITA_PUNT',cuantitativo:'MOD_RAZONA_CUANTITAT_PUNT'}[m]; return e6[k]; }), backgroundColor: C.accent4+'cc', borderRadius: 4 },
+  ]
+}, {});
+
+// ESTRATO × BLOQUE
+const estratos = ['Estrato 1','Estrato 2','Estrato 3','Estrato 4','Estrato 5','Estrato 6'];
+const bls4 = ['A: 2012-2013','B: 2014-2015','C: 2017-2022','D: 2023-2024'];
+mk('chEstBloque', 'bar', {
+  labels: estratos,
+  datasets: bls4.map(b => ({
+    label: b.split(':')[0].trim(),
+    data: estratos.map(e => { const r = ESTRATO_BLOQUE.find(d => d.bloque===b && d.estrato===e); return r ? r.punt_global : null; }),
+    backgroundColor: blqColor(b) + 'cc', borderRadius: 3,
+  }))
+}, {});
+
+// INGRESO GLOBAL
+mk('chIngGlobal', 'bar', {
+  labels: INGRESO.map(d => d.ingreso_label.replace('Entre ','').replace('y menos de','–').replace('SMLV','').trim()),
+  datasets: [{ label: 'Puntaje global', data: INGRESO.map(d => d.punt_global), backgroundColor: C.accent2+'cc', borderRadius: 4 }]
+}, { plugins: { legend: { display: false } }, indexAxis: 'y' });
+
+// INGRESO BLOQUE D
+mk('chIngBloqueD', 'bar', {
+  labels: INGRESO_D.map(d => d.ingreso_label.replace('Entre ','').replace('y menos de','–').replace('SMLV','').trim()),
+  datasets: [{ label: 'Puntaje global Bloque D', data: INGRESO_D.map(d => d.punt_global), backgroundColor: C.blqD+'cc', borderRadius: 4 }]
+}, { plugins: { legend: { display: false } }, indexAxis: 'y' });
+
+// EDU MADRE
+mk('chEduMadre', 'bar', {
+  labels: EDU_MADRE.map(d => d.edu_madre),
+  datasets: [{ label: 'Puntaje global', data: EDU_MADRE.map(d => d.mean), backgroundColor: EDU_MADRE.map((d,i) => `hsla(${280+i*8},55%,${50+i*3}%,0.8)`), borderRadius: 4 }]
+}, { plugins: { legend: { display: false } }, indexAxis: 'y' });
+
+// EDU PADRE
+mk('chEduPadre', 'bar', {
+  labels: EDU_PADRE.map(d => d.edu_padre),
+  datasets: [{ label: 'Puntaje global', data: EDU_PADRE.map(d => d.mean), backgroundColor: EDU_PADRE.map((d,i) => `hsla(${200+i*8},55%,${45+i*3}%,0.8)`), borderRadius: 4 }]
+}, { plugins: { legend: { display: false } }, indexAxis: 'y' });
+
+// EDU MADRE × BLOQUE
+const eduNivs = ['Ninguno','Primaria incompleta','Bachillerato completo','Técnica completa','Prof. completa','Postgrado'];
+const eduBls = ['B: 2014-2015','C: 2017-2022','D: 2023-2024'];
+mk('chEduBloque', 'bar', {
+  labels: eduNivs,
+  datasets: eduBls.map(b => ({
+    label: b.split(':')[0].trim(),
+    data: eduNivs.map(e => { const r = EDU_M_BL.find(d => d.bloque===b && d.edu_madre===e); return r ? r.punt_global : null; }),
+    backgroundColor: blqColor(b) + 'cc', borderRadius: 3,
+  }))
+}, {});
+
+// TRABAJA
+mk('chTrabaja', 'bar', {
+  labels: TRABAJA.map(d => d.trabaja),
+  datasets: [{ label: 'Puntaje global', data: TRABAJA.map(d => d.punt_global), backgroundColor: [C.accent2+'cc',C.accent3+'cc',C.accent+'cc',C.accent4+'cc'], borderRadius: 6 }]
+}, { plugins: { legend: { display: false } } });
+
+// TRABAJA × BLOQUE
+mk('chTrabajaBloque', 'bar', {
+  labels: ['No trabaja','Trabaja (necesidad)'],
+  datasets: ['A: 2012-2013','B: 2014-2015','D: 2023-2024'].map(b => ({
+    label: b.split(':')[0].trim(),
+    data: ['No trabaja','Trabaja (necesidad)'].map(t => { const r = TRABAJA_BL.find(d => d.bloque===b && d.trabaja===t); return r ? r.punt_global : null; }),
+    backgroundColor: blqColor(b) + 'cc', borderRadius: 4,
+  }))
+}, {});
+
+// MODALIDAD × BLOQUE
+mk('chModal', 'bar', {
+  labels: bls4.map(b => b.split(':')[0].trim()),
+  datasets: [
+    { label: 'Presencial', data: bls4.map(b => { const r = MODAL_BL.find(d => d.bloque===b && d.modalidad==='Presencial'); return r ? r.punt_global : null; }), backgroundColor: C.accent4+'cc', borderRadius: 4 },
+    { label: 'Dist. Tradicional', data: bls4.map(b => { const r = MODAL_BL.find(d => d.bloque===b && d.modalidad==='Dist. Tradicional'); return r ? r.punt_global : null; }), backgroundColor: C.accent5+'cc', borderRadius: 4 },
+  ]
+}, {});
+
+// MODALIDAD POR AÑO
+mk('chModalAnio', 'line', {
+  labels: MODAL_ANIO.map(d => d.anio),
+  datasets: [
+    { label: 'Presencial', data: MODAL_ANIO.map(d => d['Presencial']), borderColor: C.accent4, backgroundColor: C.accent4+'22', fill: true, tension: 0.3 },
+    { label: 'Distancia', data: MODAL_ANIO.map(d => d['Dist. Tradicional']), borderColor: C.accent5, backgroundColor: C.accent5+'22', fill: true, tension: 0.3 },
+  ]
+}, {});
+
+// BECA
+mk('chBeca', 'bar', {
+  labels: ['Sin beca','Con beca'],
+  datasets: [{ label: 'Puntaje global', data: [BECA.find(d=>d.beca==='No').mean, BECA.find(d=>d.beca==='Si').mean], backgroundColor: [C.muted+'88', C.accent+'cc'], borderRadius: 8 }]
+}, { plugins: { legend: { display: false } } });
+
+// BECA × ESTRATO
+mk('chBecaEstrato', 'bar', {
+  labels: BECA_EST.map(d => d.estrato),
+  datasets: [
+    { label: '% Con beca', data: BECA_EST.map(d => d.Si), backgroundColor: C.accent4+'cc', borderRadius: 4 },
+    { label: '% Sin beca', data: BECA_EST.map(d => d.No), backgroundColor: C.muted+'44', borderRadius: 4 },
+  ]
+}, { scales: { x: { stacked: true }, y: { stacked: true } } });
+
+// BECA × INGRESO
+mk('chBecaIngreso', 'bar', {
+  labels: BECA_ING.map(d => d.ingreso_label.replace('Entre ','').replace('y menos de','–').replace('SMLV','').trim()),
+  datasets: [{ label: '% Con beca', data: BECA_ING.map(d => d.Si), backgroundColor: BECA_ING.map((_,i) => `hsla(${150-i*15},60%,50%,0.75)`), borderRadius: 4 }]
+}, { plugins: { legend: { display: false } } });
+
+// TECNOLOGÍA
+mk('chTec', 'bar', {
+  labels: TEC.map(d => d.activo),
+  datasets: [{ label: 'Brecha de puntaje (Si − No)', data: TEC.map(d => d.brecha), backgroundColor: TEC.map(d => d.brecha > 20 ? C.accent3 : d.brecha > 10 ? C.accent : C.muted+'88'), borderRadius: 5 }]
+}, { plugins: { legend: { display: false } }, indexAxis: 'y' });
+
+// ÍNDICE ACTIVOS
+mk('chIndice', 'line', {
+  labels: INDICE.map(d => d.indice_activos + ' bienes'),
+  datasets: [{ label: 'Puntaje global', data: INDICE.map(d => d.mean), borderColor: C.accent, backgroundColor: C.accent+'22', fill: true, tension: 0.4, pointRadius: 6, pointBackgroundColor: C.accent }]
+}, { plugins: { legend: { display: false } } });
+
+// INGLÉS NIVEL
+mk('chInglesNivel', 'doughnut', {
+  labels: INGLES_NV.map(d => d.nivel + ' (' + d.pct + '%)'),
+  datasets: [{ data: INGLES_NV.map(d => d.n), backgroundColor: Object.values(C.ingles), borderWidth: 2, borderColor: '#13161e' }]
+}, { plugins: { legend: { position: 'right', labels: { color: C.muted, font: { size: 11 } } } }, scales: { x: { display: false }, y: { display: false } } });
+
+// INGLÉS × ESTRATO
+mk('chInglesEstrato', 'bar', {
+  labels: INGLES_EST.map(d => d.estrato),
+  datasets: ['A-','A1','A2','B1','B2','B+'].map(n => ({
+    label: n, data: INGLES_EST.map(d => d[n]),
+    backgroundColor: C.ingles[n] + 'cc', borderRadius: 2,
+  }))
+}, { scales: { x: { stacked: true }, y: { stacked: true } } });
+
+// INGLÉS × BLOQUE
+mk('chInglesBloque', 'bar', {
+  labels: INGLES_BL.map(d => d.bloque.split(':')[0].trim()),
+  datasets: ['A-','A1','A2','B1','B2','B+'].map(n => ({
+    label: n, data: INGLES_BL.map(d => d[n]),
+    backgroundColor: C.ingles[n] + 'cc', borderRadius: 2,
+  }))
+}, { scales: { x: { stacked: true }, y: { stacked: true } } });
+
+// TOP CARRERAS
+mk('chTopCar', 'bar', {
+  labels: TOP_CAR.map(d => d.nucleo.split(',')[0].slice(0,28)),
+  datasets: [{ label: 'Puntaje global', data: TOP_CAR.map(d => d.mean), backgroundColor: TOP_CAR.map((_,i) => `hsla(${140+i*15},55%,${50+i*2}%,0.8)`), borderRadius: 4 }]
+}, { plugins: { legend: { display: false } }, indexAxis: 'y' });
+
+// BOT CARRERAS
+mk('chBotCar', 'bar', {
+  labels: BOT_CAR.map(d => d.nucleo.slice(0,35)),
+  datasets: [{ label: 'Puntaje global', data: BOT_CAR.map(d => d.mean), backgroundColor: BOT_CAR.map((_,i) => `hsla(${0+i*12},55%,48%,0.8)`), borderRadius: 4 }]
+}, { plugins: { legend: { display: false } }, indexAxis: 'y' });
+
+// OCUPACIÓN MADRE
+mk('chOcupMadre', 'bar', {
+  labels: OCUP_M.map(d => d.ocupacion),
+  datasets: [{ label: 'Puntaje global', data: OCUP_M.map(d => d.mean), backgroundColor: OCUP_M.map(d => d.mean > 140 ? C.accent4+'cc' : d.mean > 80 ? C.accent2+'88' : C.accent3+'88'), borderRadius: 4 }]
+}, { plugins: { legend: { display: false } }, indexAxis: 'y' });
+
+// MOVILIDAD
+mk('chMovil', 'bar', {
+  labels: MOVIL_BL.map(d => d.bloque.split(':')[0].trim()),
+  datasets: [{ label: '% vulnerables con alto desempeño', data: MOVIL_BL.map(d => d.pct_mov), backgroundColor: MOVIL_BL.map(d => blqColor(d.bloque)+'cc'), borderRadius: 6 }]
+}, { plugins: { legend: { display: false } } });
+
+// NAV ACTIVE
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.2 });
+sections.forEach(s => obs.observe(s));
+
+}); // DOMContentLoaded
 </script>
 </body>
 </html>
